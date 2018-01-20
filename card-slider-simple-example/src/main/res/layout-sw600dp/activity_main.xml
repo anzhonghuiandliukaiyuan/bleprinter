@@ -1,0 +1,933 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/main_background">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <include layout="@layout/title_layout_main" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="10"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <!--左边内容-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="10"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <!--自检结果上报部分-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <!--蓝牙状态-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:text="蓝牙状态："
+                        android:textSize="20dp"
+                        android:textColor="#000000"/>
+
+                    <TextView
+                        android:id="@+id/conn_state_txt"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:text="未连接"
+                        android:textColor="#f13c05"
+                        android:textSize="19dp" />
+
+                    <TextView
+                        android:id="@+id/txt_main_time"
+                        android:layout_width="122dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="350dp"
+                        android:gravity="center"
+                        android:text="排空倒计时："
+                        android:textSize="16dp"
+                        android:textColor="#0f2bdb" />
+
+                    <TextView
+                        android:id="@+id/timer"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:gravity="center"
+                        android:text=""
+                        android:textSize="18dp"
+                        android:textColor="#1131c2" />
+                </LinearLayout>
+
+                <!--设备状态-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!--第一栏-->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <!--设备状态-->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:paddingTop="30dp"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="15dp"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="100dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/shebei"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="8"
+                                    android:gravity="center"
+                                    android:text="设 备 状 态"
+                                    android:textSize="16dp"
+                                    android:textColor="#1591e9"/>
+
+                                <TextView
+                                    android:id="@+id/txt_main_shebei"
+                                    android:text="正常"
+                                    android:layout_weight="5"
+                                    android:layout_width="70dp"
+                                    android:layout_height="0dp"
+                                    android:textColor="#000000"
+                                    android:background="@drawable/shape_corner"
+                                    android:gravity="center"
+                                    android:layout_gravity="center"/>
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+                        <!--压力传感器电源-->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp">
+
+                            <ImageView
+                                android:paddingTop="20dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingBottom="10dp"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="100dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/yali"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="8"
+                                    android:gravity="center"
+                                    android:text="压力传感器"
+                                    android:textSize="16dp"
+                                    android:textColor="#1591e9"/>
+
+                                <TextView
+                                    android:id="@+id/txt_main_yali"
+                                    android:text="正常"
+                                    android:layout_weight="5"
+                                    android:layout_width="70dp"
+                                    android:layout_gravity="center"
+                                    android:layout_height="0dp"
+                                    android:textColor="#000000"
+                                    android:background="@drawable/shape_corner"
+                                    android:gravity="center"/>
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp" />
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_weight="0.14"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+                    </LinearLayout>
+
+                    <!--第二栏-->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <!--喷嘴状态-->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:paddingTop="20dp"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/penzui"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="8"
+                                    android:gravity="center"
+                                    android:text="喷 嘴 状 态"
+                                    android:textSize="16dp"
+                                    android:textColor="#1591e9"/>
+
+                                <TextView
+                                    android:id="@+id/txt_main_penzui"
+                                    android:text="正常"
+                                    android:layout_weight="5"
+                                    android:layout_width="70dp"
+                                    android:layout_gravity="center"
+                                    android:layout_height="0dp"
+                                    android:textColor="#000000"
+                                    android:background="@drawable/shape_corner"
+                                    android:gravity="center"/>
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!--气压传感器电源-->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp">
+
+                            <ImageView
+                                android:paddingTop="20dp"
+                                android:paddingBottom="15dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/qiya_chuangan"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="8"
+                                    android:gravity="center"
+                                    android:text="气压传感器"
+                                    android:textSize="16dp"
+                                    android:textColor="#1591e9"/>
+
+                                <TextView
+                                    android:id="@+id/txt_main_qiya"
+                                    android:text="正常"
+                                    android:layout_weight="5"
+                                    android:layout_width="70dp"
+                                    android:layout_gravity="center"
+                                    android:layout_height="0dp"
+                                    android:textColor="#000000"
+                                    android:background="@drawable/shape_corner"
+                                    android:gravity="center"/>
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp" />
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_weight="0.14"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+                    </LinearLayout>
+
+                    <!--第三栏-->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <!--加热状态-->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:paddingTop="25dp"
+                                android:paddingBottom="15dp"
+                                android:paddingLeft="14dp"
+                                android:paddingRight="14dp"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jiare"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="8"
+                                    android:gravity="center"
+                                    android:text="加 热 状 态"
+                                    android:textSize="16dp"
+                                    android:textColor="#1591e9"/>
+
+                                <TextView
+                                    android:id="@+id/txt_main_jiare"
+                                    android:text="正常"
+                                    android:layout_weight="5"
+                                    android:layout_width="70dp"
+                                    android:layout_gravity="center"
+                                    android:layout_height="0dp"
+                                    android:textColor="#000000"
+                                    android:background="@drawable/shape_corner"
+                                    android:gravity="center"/>
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+                        <!--泵电机供电-->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/dianji"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="8"
+                                    android:gravity="center"
+                                    android:text="泵电机供电"
+                                    android:textSize="16dp"
+                                    android:textColor="#1591e9"/>
+
+                                <TextView
+                                    android:id="@+id/txt_main_dianji"
+                                    android:text="正常"
+                                    android:layout_weight="5"
+                                    android:layout_width="70dp"
+                                    android:layout_gravity="center"
+                                    android:layout_height="0dp"
+                                    android:textColor="#000000"
+                                    android:background="@drawable/shape_corner"
+                                    android:gravity="center"/>
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_weight="0.14"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+                    </LinearLayout>
+
+
+                    <!--第四栏-->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+
+
+                        <!--电磁阀-->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp">
+
+                            <ImageView
+                                android:paddingTop="32dp"
+                                android:paddingBottom="20dp"
+                                android:paddingLeft="18dp"
+                                android:paddingRight="18dp"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/dianci"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="8"
+                                    android:gravity="center"
+                                    android:text="电  磁  阀"
+                                    android:textSize="16dp"
+                                    android:textColor="#1591e9"/>
+
+                                <TextView
+                                    android:id="@+id/txt_main_dianci"
+                                    android:text="正常"
+                                    android:layout_weight="5"
+                                    android:layout_width="70dp"
+                                    android:layout_gravity="center"
+                                    android:layout_height="0dp"
+                                    android:textColor="#000000"
+                                    android:background="@drawable/shape_corner"
+                                    android:gravity="center"/>
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp" />
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                        <!--CAN总线-->
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp">
+
+                            <ImageView
+                                android:paddingTop="35dp"
+                                android:paddingBottom="20dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/can"/>
+
+                            <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="8"
+                                    android:gravity="center"
+                                    android:text="CAN总线"
+                                    android:textSize="16dp"
+                                    android:textColor="#1591e9"/>
+
+                                <TextView
+                                    android:id="@+id/txt_main_CAN"
+                                    android:text="正常"
+                                    android:layout_weight="5"
+                                    android:layout_width="70dp"
+                                    android:layout_gravity="center"
+                                    android:layout_height="0dp"
+                                    android:textColor="#000000"
+                                    android:background="@drawable/shape_corner"
+                                    android:gravity="center"/>
+                                <TextView
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp" />
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_weight="0.14"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--下面部分-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.8"
+                android:padding="5dp"
+                android:orientation="horizontal">
+
+                <!--状态上报部分-->
+                <TableLayout
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:background="#1591e9"
+                    android:layout_height="match_parent">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_marginLeft="0dp"
+                            android:layout_marginRight="2dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="实时状态"
+                            android:textSize="17dp"
+                            android:background="#ffffff"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:textColor="#0679eb"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="电    压"
+                            android:textSize="17dp"
+                            android:textColor="#1591e9"
+                            android:background="#ffffff"/>
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:id="@+id/txt_main_dianya"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="00.00"
+                            android:textColor="#ff6a00"
+                            android:background="#ffffff"
+                            android:textSize="17dp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="电    流"
+                            android:textSize="17dp"
+                            android:textColor="#1591e9"
+                            android:background="#ffffff"/>
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:id="@+id/txt_main_dianliu"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="00.00"
+                            android:textColor="#ff6a00"
+                            android:background="#ffffff"
+                            android:textSize="17dp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="温    度"
+                            android:textSize="17dp"
+                            android:textColor="#1591e9"
+                            android:background="#ffffff"/>
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:id="@+id/txt_main_wendu"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="00.00"
+                            android:textColor="#ff6a00"
+                            android:background="#ffffff"
+                            android:textSize="17dp" />
+
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="气    压"
+                            android:textSize="17dp"
+                            android:textColor="#1591e9"
+                            android:background="#ffffff"/>
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:id="@+id/txt_main_QiYa"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="00.00"
+                            android:textColor="#ff6a00"
+                            android:background="#ffffff"
+                            android:textSize="17dp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="泵压力"
+                            android:textSize="17dp"
+                            android:textColor="#1591e9"
+                            android:background="#ffffff"/>
+
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:id="@+id/txt_main_YaLi"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="00.00"
+                            android:textColor="#ff6a00"
+                            android:background="#ffffff"
+                            android:textSize="17dp" />
+                    </TableRow>
+                </TableLayout>
+
+
+                <!--故障提示部分-->
+                <LinearLayout
+                    android:layout_marginLeft="13dp"
+                    android:layout_weight="4"
+                    android:layout_width="0dp"
+                    android:background="#1591e9"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_margin="2dp"
+                        android:id="@+id/txt_main_guzhang"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textColor="#eb2b0d"
+                        android:background="#ffffff"
+                        android:textSize="23dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--按钮部分-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1.8"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/btn_main_wait"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="待  机"
+                android:gravity="center"
+                app:qmui_backgroundColor="#ffffff"
+                app:qmui_borderColor="#fa7102"
+                app:qmui_borderWidth="2dp"
+                app:qmui_isRadiusAdjustBounds="true"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"/>
+
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/btn_main_start"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="开始建压"
+                android:textColor="#1591e9"
+                android:gravity="center"
+                app:qmui_backgroundColor="#ffffff"
+                app:qmui_borderColor="#1591e9"
+                app:qmui_borderWidth="2dp"
+                app:qmui_isRadiusAdjustBounds="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"/>
+
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/btn_main_jiare"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="开始加热"
+                android:textColor="#1591e9"
+                android:gravity="center"
+                app:qmui_backgroundColor="#ffffff"
+                app:qmui_borderColor="#1591e9"
+                app:qmui_borderWidth="2dp"
+                app:qmui_isRadiusAdjustBounds="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"/>
+
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/btn_main_penshe"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="启动喷射"
+                android:textColor="#1591e9"
+                android:gravity="center"
+                app:qmui_backgroundColor="#ffffff"
+                app:qmui_borderColor="#1591e9"
+                app:qmui_borderWidth="2dp"
+                app:qmui_isRadiusAdjustBounds="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"/>
+
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/btn_main_paikong"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="开始排空"
+                android:textColor="#1591e9"
+                android:gravity="center"
+                app:qmui_backgroundColor="#ffffff"
+                app:qmui_borderColor="#1591e9"
+                app:qmui_borderWidth="2dp"
+                app:qmui_isRadiusAdjustBounds="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"/>
+
+
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/btn_main_fanxiang"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="启动反向阀"
+                android:textColor="#1591e9"
+                android:gravity="center"
+                app:qmui_backgroundColor="#ffffff"
+                app:qmui_borderColor="#1591e9"
+                app:qmui_borderWidth="2dp"
+                app:qmui_isRadiusAdjustBounds="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"/>
+
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/btn_main_huiliu"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="启动回流泵"
+                android:textColor="#1591e9"
+                android:gravity="center"
+                app:qmui_backgroundColor="#ffffff"
+                app:qmui_borderColor="#1591e9"
+                app:qmui_borderWidth="2dp"
+                app:qmui_isRadiusAdjustBounds="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
