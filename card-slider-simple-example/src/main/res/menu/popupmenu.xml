@@ -3,13 +3,9 @@
 
     <item
         android:id="@+id/menu_version"
-        android:title="获取版本号">
+        android:title="获取版本号" />
 
-    </item>
-
-    <item android:title="版本升级"
-        android:id="@+id/menu_update">
-
-    </item>
+   <!-- <item android:title="版本升级"
+        android:id="@+id/menu_update" />-->
 
 </menu>

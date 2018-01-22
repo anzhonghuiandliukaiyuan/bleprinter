@@ -29,6 +29,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private final int[] pics = {R.drawable.pp11, R.drawable.pp22, R.drawable.pp33, R.drawable.pp44, R.drawable.pp55};
     private final String[] countries = {"博世2.2(24V)", "博世6.5(24V)", "天纳克1.5", "天纳克6.0", "无锡凯龙"};
+    private final byte[] type = {(byte) 0xFF, 0x00,(byte) 0xFF,(byte) 0xFF,(byte) 0xFF};
 
     private final SliderAdapter sliderAdapter = new SliderAdapter(pics, 5, new OnCardClickListener());
 
@@ -235,6 +236,7 @@ public class MenuActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MenuActivity.this,MainActivity.class);
                 intent.putExtra("设备型号",countries[clickedPosition]);
+                intent.putExtra("TYPE",type[clickedPosition]);
                 startActivity(intent);
             } else if (clickedPosition > activeCardPosition) {
                 recyclerView.smoothScrollToPosition(clickedPosition);

@@ -82,6 +82,13 @@ public class BlueToothHelper  {
                 for (int i = 0; i < qppData.length; i++) {
                     data[i] = qppData[i] & 0xFF;
                 }
+
+                //进行异或校验
+                if(!ProtocolUtil.checkReceiveData(data)){
+                    Log.e(TAG, "异或校验失败：" + ProtocolUtil.ints2HexString(data));
+                    return;
+                }
+
                 Log.e(TAG, "收到蓝牙数据：" + ProtocolUtil.ints2HexString(data));
                 //log.info("收到蓝牙数据"+ ProtocolUtil.ints2HexString(data));
 
@@ -243,11 +250,18 @@ public class BlueToothHelper  {
                             break;
                         case 0x06:           //返回版本信息
                             intent = new Intent(FarmConstant.VERSION_RESPONSE_ACTION_NAME);
-                            int[] newData = new int[20];
-                            newData[0] = data[4];
-                            newData[1] = data[5];
-                            intent.putExtra("HWVersion",newData[0]);
-                            intent.putExtra("SWVersion",newData[1]);
+//                            int[] newData = new int[20];
+//                            newData[0] = data[4];
+//                            newData[1] = data[5];
+                            String HWVersion = ProtocolUtil.bytes2HexString(new byte[]{(byte) data[4]});
+                            String SWVersion = ProtocolUtil.bytes2HexString(new byte[]{(byte) data[5]});
+                            intent.putExtra("HWVersion",HWVersion);
+                            intent.putExtra("SWVersion",SWVersion);
+                            intent.putExtra("BLUETOOTH_RESULT",blueToothResult);
+                            broadcastManager.sendBroadcast(intent);
+                            break;
+                        case 0x0E:              //返回主界面BACK_MAIN
+                            intent = new Intent(FarmConstant.BACK_MAIN);
                             intent.putExtra("BLUETOOTH_RESULT",blueToothResult);
                             broadcastManager.sendBroadcast(intent);
                             break;

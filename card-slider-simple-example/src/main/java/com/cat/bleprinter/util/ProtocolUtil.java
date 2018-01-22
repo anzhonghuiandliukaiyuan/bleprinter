@@ -1,5 +1,7 @@
 package com.cat.bleprinter.util;
 
+import com.cat.bleprinter.constant.FarmConstant;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -88,7 +90,7 @@ public class ProtocolUtil {
         byte[] temp = new byte[param.length + 6];
         byte[] data = ArrayFill.fillBytes(temp, 4, param.length, param);
         data[0] = (byte) 0xAA;
-        data[1] = (byte) 0x00;
+        data[1] = FarmConstant.TYPE;
         data[2] = cmd;
         data[3] = (byte) param.length;
         data[data.length - 2] = XorByByte(data);
@@ -171,6 +173,20 @@ public class ProtocolUtil {
             e.printStackTrace();
         }
         return a;
+    }
+
+    //检查收到的数据的异或校验
+    public static  boolean checkReceiveData(int[] data){
+        byte check = (byte) data[data.length - 2];
+        byte checkData[] = new byte[data.length-3];
+        for (int i = 0; i < data.length-3; i++) {
+            checkData[i] = (byte)data[i+1];
+        }
+        if(check == XorByByte(checkData)){
+            return true;
+        }
+        System.out.println("校验失败，正确的校验码为："+bytes2HexString(new byte[]{XorByByte(checkData)}));
+        return false;
     }
 
 }

@@ -35,6 +35,11 @@ public class FarmConstant {
     public static final String GZ_RESPONSE_ACTION_NAME = "com.cat.ble.response.zhuangtai";
     public static final String VERSION_RESPONSE_ACTION_NAME = "com.cat.ble.response.version";
     public static final String JY_RESPONSE_ACTION_NAME = "com.cat.ble.response.jianya";
-    public static final String BLUETOOTH_RESULT = "com.cat.ble.bluetooth.result";
+    public static final String BACK_MAIN = "com.cat.ble.bluetooth.back";
+
+
+    //用于记录全局的设备类型编号
+    public static byte TYPE = (byte) 0xFF;
+    public static boolean ANSWER = false;
 
 }
