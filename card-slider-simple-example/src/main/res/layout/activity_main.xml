@@ -584,7 +584,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="实时状态"
+                            android:text="状    态"
                             android:textSize="12dp"
                             android:background="#ffffff"
                             android:gravity="center"
@@ -613,6 +613,30 @@
                         <TextView
                             android:layout_margin="1dp"
                             android:id="@+id/txt_main_dianya"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="00.00"
+                            android:textColor="#ff6a00"
+                            android:background="#ffffff"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="泵压力"
+                            android:textSize="12dp"
+                            android:textColor="#1591e9"
+                            android:background="#ffffff"/>
+
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:id="@+id/txt_main_YaLi"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -653,6 +677,28 @@
                             android:background="#ffffff"
                             android:textSize="14dp" />
 
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="喷嘴阻值"
+                            android:textColor="#1591e9"
+                            android:background="#ffffff"
+                            android:textSize="12dp"/>
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/txt_main_nozzle_resistance"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="00.00"
+                            android:textColor="#ff6a00"
+                            android:background="#ffffff"
+                            android:textSize="14dp"/>
                     </TableRow>
 
                     <TableRow
@@ -683,7 +729,28 @@
                             android:background="#ffffff"
                             android:textSize="14dp" />
 
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="加热阻值"
+                            android:textColor="#1591e9"
+                            android:background="#ffffff"
+                            android:textSize="12dp"/>
 
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/txt_main_heat_resistance"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="00.00"
+                            android:textColor="#ff6a00"
+                            android:background="#ffffff"
+                            android:textSize="14dp"/>
                     </TableRow>
 
                     <TableRow
@@ -714,13 +781,6 @@
                             android:textColor="#ff6a00"
                             android:background="#ffffff"
                             android:textSize="14dp" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1">
-
 
                         <TextView
                             android:layout_margin="1dp"
@@ -728,31 +788,33 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="泵压力"
-                            android:textSize="12dp"
+                            android:text="电磁阀阻值"
                             android:textColor="#1591e9"
-                            android:background="#ffffff"/>
-
+                            android:background="#ffffff"
+                            android:textSize="11dp"/>
 
                         <TextView
                             android:layout_margin="1dp"
-                            android:id="@+id/txt_main_YaLi"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+                            android:id="@+id/txt_main_diancifa_resistance"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="00.00"
                             android:textColor="#ff6a00"
                             android:background="#ffffff"
-                            android:textSize="14dp" />
+                            android:textSize="14dp"/>
+
                     </TableRow>
+
                 </TableLayout>
+
 
 
                 <!--故障提示部分-->
                 <LinearLayout
                     android:layout_marginLeft="8dp"
-                    android:layout_weight="4"
+                    android:layout_weight="3"
                     android:layout_width="0dp"
                     android:background="#1591e9"
                     android:layout_height="match_parent">

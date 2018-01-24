@@ -36,6 +36,7 @@ import com.cat.bleprinter.dao.BlueToothDao;
 import com.cat.bleprinter.entity.BlueTooth;
 import com.cat.bleprinter.exception.BleNoConnectedException;
 import com.cat.bleprinter.helper.BlueToothHelper;
+import com.cat.bleprinter.util.Arith;
 import com.cat.bleprinter.util.ProtocolUtil;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 
@@ -82,7 +83,10 @@ public class MainActivity extends AppCompatActivity {
             btn_main_jiare, btn_main_fanxiang, btn_main_huiliu;
     private TextView txt_main_time,mtimer,txt_shebei_xinghao;
     private TextView conn_state_txt,txt_main_guzhang;
-    private TextView txt_main_dianya,txt_main_dianliu,txt_main_YaLi,txt_main_wendu,txt_main_QiYa;
+    //试试状态
+    private TextView txt_main_dianya,txt_main_dianliu,txt_main_YaLi,txt_main_wendu,txt_main_QiYa,
+            txt_main_diancifa_resistance,txt_main_heat_resistance,txt_main_nozzle_resistance;
+    //自检结果上报
     private TextView txt_main_shebei, txt_main_penzui, txt_main_dianji, txt_main_jiare,
             txt_main_yali, txt_main_dianci, txt_main_qiya, txt_main_CAN;
     private BluetoothAdapter mBluetoothAdapter = null;
@@ -103,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
         //注册广播
         registerBoradcastReceiver();
-
 
         initView();
         initHandler();
@@ -138,11 +141,12 @@ public class MainActivity extends AppCompatActivity {
             BlueTooth device = blueToothDao.getFirst();
             if (device == null) {
                 showToast("请先连接蓝牙设备！");
+                finish();
             }
         }
 
         //进入泵，一开始先发送握手信号，成功握手后才可以操作,启动定时任务 - 安仲辉
-        startHandTimer();
+//        startHandTimer();
     }
 
     //接收广播
@@ -153,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(action);
 
             String bluetoothResult = intent.getStringExtra("BLUETOOTH_RESULT");
-            Toast.makeText(MainActivity.this, bluetoothResult, Toast.LENGTH_LONG).show();
+            //Toast.makeText(MainActivity.this, bluetoothResult, Toast.LENGTH_LONG).show();
 
 
             if (action.equals(FarmConstant.SATE_ACTION_NAME)) {
@@ -181,30 +185,31 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                }
 
-                if(result[0] == FarmConstant.CMD_HANDSHAKE){
-                    if (result[1] == 0x00){
-//                        showToast("捂手成功，允许建立操作");
-                        Log.i("TGA", "握手成功，允许建立操作");
-                        initButton(false, false);
-
-                        //设置设备已经应答
-                        FarmConstant.ANSWER = true;
-
-                        //握手成功后，获取版本号
-                        byte[] param = {};
-                        byte[] data = ProtocolUtil.packData(CMD_VERSION, param);
-
-                        try {
-                            BlueToothHelper.sendData(data);
-                        } catch (BleNoConnectedException e) {
-                            e.printStackTrace();
-                        }
-
-                    }else if(result[1] == 0x01){
-                        showToast("握手失败");
-                        initButton(false, true);
-                    }
-                }
+//                if(result[0] == FarmConstant.CMD_HANDSHAKE){
+//                    if (result[1] == 0x00){
+////                        showToast("捂手成功，允许建立操作");
+//                        Log.i("TGA", "握手成功，允许建立操作");
+//                        initButton(false, false);
+//
+//                        //设置设备已经应答
+////                        FarmConstant.ANSWER = true;
+//
+//                        //握手成功后，获取版本号
+//                        byte[] param = {};
+//                        byte[] data = ProtocolUtil.packData(CMD_VERSION, param);
+//
+//                        try {
+//                            BlueToothHelper.sendData(data);
+//                        } catch (BleNoConnectedException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }else if(result[1] == 0x01){
+//                        showToast("握手失败");
+//                        initButton(false, true);
+//                        finish();
+//                    }
+//                }
 
                 //开始建压
                 if (result[0] == FarmConstant.CMD_START){
@@ -323,8 +328,26 @@ public class MainActivity extends AppCompatActivity {
             }else if (action.equals(FarmConstant.ZJ_RESPONSE_ACTION_NAME)) {   //自检结果上报
                 Log.e(TAG, "进入响应自检结果广播");
                 String[] responseData = intent.getStringArrayExtra("responseData");
+                int[] value = intent.getIntArrayExtra("VALUE");
                 showProgressBar(false);
                 handleResponse(responseData);
+
+                //直接再次修改,急
+                if(value[0] != 0){
+                    txt_main_nozzle_resistance.setText(value[0]+"Ω");
+                }else{
+                    txt_main_nozzle_resistance.setText("0");
+                }
+                if(value[1] != 0){
+                    txt_main_heat_resistance.setText(value[1]+"Ω");
+                }else{
+                    txt_main_heat_resistance.setText("0");
+                }
+                if(value[2] != 0){
+                    txt_main_diancifa_resistance.setText(value[2]+"Ω");
+                }else{
+                    txt_main_diancifa_resistance.setText("0");
+                }
             }else if(action.equals(FarmConstant.ZT_RESPONSE_ACTION_NAME)){      //状态上报
                 Log.e(TAG,"进入状态上报响应广播");
                 int[] reData = intent.getIntArrayExtra("responseData");
@@ -340,9 +363,6 @@ public class MainActivity extends AppCompatActivity {
             }else if (action.equals(FarmConstant.JY_RESPONSE_ACTION_NAME)){     //建压完成结果上报
                 String[] responseData = intent.getStringArrayExtra("responseData");
                 handleResponse(responseData);
-            }else if (FarmConstant.BACK_MAIN.equals(action)){
-                System.out.println("收到返回主界面的命令");
-                finish();
             }
 
         }
@@ -370,9 +390,12 @@ public class MainActivity extends AppCompatActivity {
                 list.add(txt_main_CAN);
                 for(int i = 0;i<responseData.length;i++){
                     ((TextView) list.get(i)).setText(responseData[i]);
-                    if (responseData[i] == "异常" | responseData[i] == "断路"){
+                    if (responseData[i] == "异常" | responseData[i] == "断路" | responseData[i] == "短路"){
                         ((TextView) list.get(i)).setTextColor(Color.RED);
+                    } else if (responseData[i] == "正常"){
+                        ((TextView) list.get(i)).setTextColor(Color.rgb(34, 139, 34));
                     }
+
                 }
             } else if (responseData.length == 1) {
 
@@ -406,9 +429,14 @@ public class MainActivity extends AppCompatActivity {
 
         private void handleResponse(int[] reData){
             if(reData[0] == 0x05 ){
-                txt_main_dianya.setText(reData[1]+"");
-                txt_main_dianliu.setText(reData[2]+"");
-                txt_main_YaLi.setText(reData[3]+"");
+                if(reData[1] < 1000){
+                    txt_main_dianya.setText(reData[1]+"mV");
+                }else{
+                    txt_main_dianya.setText(Arith.round(reData[1]/1000.0, 2)+"V");
+                }
+
+                txt_main_dianliu.setText(reData[2]+"mA");
+                txt_main_YaLi.setText(reData[3]/100.0+"bar");
                 txt_main_wendu.setText(reData[4]+"");
                 txt_main_QiYa.setText(reData[5]+"");
             }
@@ -424,7 +452,6 @@ public class MainActivity extends AppCompatActivity {
             myIntentFilter.addAction(FarmConstant.GZ_RESPONSE_ACTION_NAME);
             myIntentFilter.addAction(FarmConstant.VERSION_RESPONSE_ACTION_NAME);
             myIntentFilter.addAction(FarmConstant.JY_RESPONSE_ACTION_NAME);
-            myIntentFilter.addAction(FarmConstant.BACK_MAIN);
 
             //注册广播
             broadcastManager.registerReceiver(mBroadcastReceiver, myIntentFilter);
@@ -731,6 +758,25 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onDestroy () {
+
+            //当用户退出测试界面的时候，需要再次建立握手
+            FarmConstant.HAND_ANSWER_STATE = 0;
+
+            //先判断蓝牙是否已连接
+            if (BlueToothHelper.mConnected) {
+                byte cmdStart = FarmConstant.CMD_BACK;//  获取返回主界面的命令字
+                byte[] param = {};
+                byte[] data = ProtocolUtil.packData(cmdStart, param);
+
+                try {
+                    BlueToothHelper.sendData(data);
+                } catch (BleNoConnectedException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                Toast.makeText(MainActivity.this, "请先连接蓝牙设备！", Toast.LENGTH_LONG).show();
+            }
+
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
 
             super.onDestroy();
@@ -848,6 +894,9 @@ public class MainActivity extends AppCompatActivity {
             txt_main_YaLi = (TextView) findViewById(R.id.txt_main_YaLi);
             txt_main_wendu = (TextView) findViewById(R.id.txt_main_wendu);
             txt_main_QiYa = (TextView) findViewById(R.id.txt_main_QiYa);
+            txt_main_nozzle_resistance = (TextView) findViewById(R.id.txt_main_nozzle_resistance);
+            txt_main_heat_resistance = (TextView) findViewById(R.id.txt_main_heat_resistance);
+            txt_main_diancifa_resistance = (TextView) findViewById(R.id.txt_main_diancifa_resistance);
 
             //获取表示故障通知的文本
             txt_main_guzhang = (TextView) findViewById(R.id.txt_main_guzhang);
@@ -919,14 +968,18 @@ public class MainActivity extends AppCompatActivity {
            timer1.schedule(task,0,1000);
        }
 
-    //启动握手定时任务
+    //启动握手定时任务 发送三次
     private void startHandTimer() {
         final Timer timer1 = new Timer();
         TimerTask task = new TimerTask() {
             int count = 1;
             @Override
             public void run() {
-                if(count == 3 || FarmConstant.ANSWER){
+                if(count == 3 && !FarmConstant.ANSWER){
+                    timer1.cancel();
+                    finish();
+                }
+                if(FarmConstant.ANSWER){
                     timer1.cancel();
                 }
 
@@ -938,7 +991,7 @@ public class MainActivity extends AppCompatActivity {
                 //System.out.println(ProtocolUtil.bytes2HexString(ProtocolUtil.HexString2Buf(timeStr)));
 
                 //拼接数据，时间后追加泵的编号 - 安仲辉
-                byte[] paramHandShake = ProtocolUtil.append(ProtocolUtil.HexString2Buf(timeStr), (byte)0x00);
+                byte[] paramHandShake = ProtocolUtil.append(ProtocolUtil.HexString2Buf(timeStr), (byte)FarmConstant.TYPE);
                 byte[] dataHandShake = new ProtocolUtil().packData(cmdHandShake, paramHandShake);
                 try {
                     BlueToothHelper.sendData(dataHandShake);
@@ -949,7 +1002,7 @@ public class MainActivity extends AppCompatActivity {
                 count++;
             }
         };
-        timer1.schedule(task,0,200);
+        timer1.schedule(task,0,1000);
     }
 
 
@@ -1096,4 +1149,6 @@ public class MainActivity extends AppCompatActivity {
             fis.close();
             return data;
         }
+
+
 }

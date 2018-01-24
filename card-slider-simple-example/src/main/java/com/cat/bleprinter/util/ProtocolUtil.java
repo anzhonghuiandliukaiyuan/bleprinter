@@ -1,7 +1,5 @@
 package com.cat.bleprinter.util;
 
-import com.cat.bleprinter.constant.FarmConstant;
-
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -90,10 +88,16 @@ public class ProtocolUtil {
         byte[] temp = new byte[param.length + 6];
         byte[] data = ArrayFill.fillBytes(temp, 4, param.length, param);
         data[0] = (byte) 0xAA;
-        data[1] = FarmConstant.TYPE;
+        data[1] = 0x00;
         data[2] = cmd;
         data[3] = (byte) param.length;
-        data[data.length - 2] = XorByByte(data);
+
+        byte checkData[] = new byte[data.length-3];
+        for (int i = 0; i < data.length-3; i++) {
+            checkData[i] = data[i+1];
+        }
+
+        data[data.length - 2] = XorByByte(checkData);
         data[data.length - 1] = (byte) 0xCC;
 
         return data;
@@ -101,18 +105,16 @@ public class ProtocolUtil {
 
 
     /**
-     * 异或校检 按字节 本方法不具备通用性 只适用于当前协议
+     * 异或校检
      *
      * @return
      */
     public static byte XorByByte(byte[] data) {
         byte temp = data[0];
-        for (int i = 0; i < data.length - 2; i++) {
+        for (int i = 1; i < data.length; i++) {
             temp ^= data[i];
         }
-
         return temp;
-
     }
 
     /**

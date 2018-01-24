@@ -22,8 +22,6 @@ import com.cat.bleprinter.util.ProtocolUtil;
 import com.quintic.libqpp.QppApi;
 import com.quintic.libqpp.iQppCallback;
 
-import org.apache.log4j.Logger;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,9 +29,6 @@ import java.util.List;
  * Created by FMY on 2017/6/24 0024.
  */
 public class BlueToothHelper  {
-
-    private static Logger log = Logger.getLogger(BlueToothHelper.class);
-
 
     private static final String TAG = BlueToothHelper.class.getSimpleName();
     private static BluetoothAdapter mBluetoothAdapter = null;
@@ -99,14 +94,23 @@ public class BlueToothHelper  {
                 String blueToothResult = "蓝牙数据："+ProtocolUtil.ints2HexString(data);
 
                 if (data[0] == 0xAA && data[data.length - 1] == 0xCC) {
-                    System.out.println(data[2]);
                     //完整的数据,取命令字
                     switch (data[2]){            //判断命令字类型
                         case 0x00:               //通用应答
-                            intent = new Intent(FarmConstant.TY_RESPONSE_ACTION_NAME);
                             byte[] result = new byte[2];         //要返回的命令结果
                             result[0] = (byte) data[4];          //要回应的命令的命令字
                             result[1] = (byte) data[5];          //回应的结果 成功|失败
+
+                            //如果是握手的通用应答
+                            if(result[0] == FarmConstant.CMD_HANDSHAKE){
+                                intent = new Intent(FarmConstant.HAND);
+                                intent.putExtra("RESULT",result[1]);
+                                broadcastManager.sendBroadcast(intent);
+                                break;
+                            }
+
+                            //如果是其他的通用应答，使用下面的
+                            intent = new Intent(FarmConstant.TY_RESPONSE_ACTION_NAME);
                             intent.putExtra("RESULT",result);
                             intent.putExtra("BLUETOOTH_RESULT",blueToothResult);
                             broadcastManager.sendBroadcast(intent);
@@ -124,10 +128,12 @@ public class BlueToothHelper  {
                             intent = new Intent(FarmConstant.ZJ_RESPONSE_ACTION_NAME);
                             //检测设备状态
                             String[] responseData = new String[8];
+                            //用于存放正常设备返回的
+                            int[] value = new int[3];
                             if (data[4]==FarmConstant.NORMAL){
                                 Log.e(TAG,"设备状态正常");
                                 responseData[0] = "正常";
-                            }else {
+                            } else {
                                 Log.e(TAG,"设备状态异常");
                                 responseData[0] = "异常";
                             }
@@ -136,86 +142,120 @@ public class BlueToothHelper  {
                             if (data[5]==FarmConstant.NORMAL){
                                 Log.e(TAG,"喷嘴状态正常");
                                 responseData[1] = "正常";
+
+                                //如果正常解析值,值0是喷嘴阻值
+                                value[0] = ProtocolUtil.shortbyte2int(new byte[]{(byte) data[6], (byte) data[7]});
+
                             }else if (data[5]==FarmConstant.ABNORMAL){
                                 Log.e(TAG,"喷嘴短路");
-                                responseData[1] = "异常";
-                            }else{
+                                responseData[1] = "短路";
+                            }else if (data[5]==FarmConstant.UNCIRCUIT) {
                                 Log.e(TAG,"喷嘴断路");
                                 responseData[1] = "断路";
+                            }else if (data[5]==FarmConstant.UNKNOWN) {
+                                Log.e(TAG,"喷嘴未知");
+                                responseData[1] = "未知";
                             }
 
                             //检测泵电机供电
-                            if (data[6]==FarmConstant.NORMAL){
-                                Log.e(TAG,"供电机状态正常");
+                            if (data[8]==FarmConstant.NORMAL){
+                                Log.e(TAG,"泵电机状态正常");
                                 responseData[2] = "正常";
-                            }else if (data[6]==FarmConstant.ABNORMAL){
-                                Log.e(TAG,"供电机短路");
-                                responseData[2] = "异常";
-                            }else{
-                                Log.e(TAG,"供电机断路");
+                            }else if (data[8]==FarmConstant.ABNORMAL){
+                                Log.e(TAG,"泵电机短路");
+                                responseData[2] = "短路";
+                            }else if (data[8]==FarmConstant.UNCIRCUIT) {
+                                Log.e(TAG,"泵电机断路");
                                 responseData[2] = "断路";
+                            }else if (data[8]==FarmConstant.UNKNOWN) {
+                                Log.e(TAG,"泵电机未知");
+                                responseData[2] = "未知";
                             }
 
                             //加热
-                            if (data[7]==FarmConstant.NORMAL){
+                            if (data[9]==FarmConstant.NORMAL){
                                 Log.e(TAG,"加热状态正常");
                                 responseData[3] = "正常";
-                            }else if (data[7]==FarmConstant.ABNORMAL){
-                                Log.e(TAG,"加热短路");
-                                responseData[3] = "异常";
-                            }else{
-                                Log.e(TAG,"加热断路");
+
+                                //如果正常解析值,值0是加热阻值
+                                value[1] = ProtocolUtil.shortbyte2int(new byte[]{(byte) data[10], (byte) data[11]});
+
+                            }else if (data[9]==FarmConstant.ABNORMAL){
+                                Log.e(TAG,"加热状态短路");
+                                responseData[3] = "短路";
+                            }else if (data[9]==FarmConstant.UNCIRCUIT) {
+                                Log.e(TAG,"加热状态断路");
                                 responseData[3] = "断路";
+                            }else if (data[9]==FarmConstant.UNKNOWN) {
+                                Log.e(TAG,"加热状态未知");
+                                responseData[3] = "未知";
                             }
 
                             //压力传感器电源
-                            if (data[8]==FarmConstant.NORMAL){
-                                Log.e(TAG,"传感器电源状态正常");
+                            if (data[12]==FarmConstant.NORMAL){
+                                Log.e(TAG,"压力传感器状态正常");
                                 responseData[4] = "正常";
-                            }else if (data[8]==FarmConstant.ABNORMAL){
-                                Log.e(TAG,"压力传感器短路");
-                                responseData[4] = "异常";
-                            }else{
-                                Log.e(TAG,"压力传感器断路");
+                            }else if (data[12]==FarmConstant.ABNORMAL){
+                                Log.e(TAG,"压力传感器状态短路");
+                                responseData[4] = "短路";
+                            }else if (data[12]==FarmConstant.UNCIRCUIT) {
+                                Log.e(TAG,"压力传感器状态断路");
                                 responseData[4] = "断路";
+                            }else if (data[12]==FarmConstant.UNKNOWN) {
+                                Log.e(TAG,"压力传感器状态未知");
+                                responseData[4] = "未知";
                             }
 
                             //检测电磁阀状态
-                            if (data[9]==FarmConstant.NORMAL){
+                            if (data[13]==FarmConstant.NORMAL){
                                 Log.e(TAG,"电磁阀状态正常");
                                 responseData[5] = "正常";
-                            }else if (data[9]==FarmConstant.ABNORMAL){
-                                Log.e(TAG,"电磁阀短路");
-                                responseData[5] = "异常";
-                            }else{
-                                Log.e(TAG,"电磁阀断路");
+
+                                value[2] = ProtocolUtil.shortbyte2int(new byte[]{(byte) data[14], (byte) data[15]});
+
+                            }else if (data[13]==FarmConstant.ABNORMAL){
+                                Log.e(TAG,"电磁阀状态短路");
+                                responseData[5] = "短路";
+                            }else if (data[13]==FarmConstant.UNCIRCUIT) {
+                                Log.e(TAG,"电磁阀状态断路");
                                 responseData[5] = "断路";
+                            }else if (data[13]==FarmConstant.UNKNOWN) {
+                                Log.e(TAG,"电磁阀状态未知");
+                                responseData[5] = "未知";
                             }
 
                             //检测气压传感器电源
-                            if (data[10]==FarmConstant.NORMAL) {
-                                Log.e(TAG,"气压传感器正常");
+                            if (data[16]==FarmConstant.NORMAL){
+                                Log.e(TAG,"气压传感器状态正常");
                                 responseData[6] = "正常";
-                            }else if (data[10]==FarmConstant.ABNORMAL){
-                                Log.e(TAG,"气压传感器短路");
-                                responseData[6] = "异常";
-                            }else{
-                                Log.e(TAG,"气压传感器断路");
-                                responseData[6] = "异常";
+                            }else if (data[16]==FarmConstant.ABNORMAL){
+                                Log.e(TAG,"气压传感器状态短路");
+                                responseData[6] = "短路";
+                            }else if (data[16]==FarmConstant.UNCIRCUIT) {
+                                Log.e(TAG,"气压传感器状态断路");
+                                responseData[6] = "断路";
+                            }else if (data[16]==FarmConstant.UNKNOWN) {
+                                Log.e(TAG,"气压传感器状态未知");
+                                responseData[6] = "未知";
                             }
-
 
                             //检测CAN总线
-                            if (data[11]==FarmConstant.NORMAL){
+                            if (data[17]==FarmConstant.NORMAL){
                                 Log.e(TAG,"CAN状态正常");
                                 responseData[7] = "正常";
-                            }else {
-                                Log.e(TAG,"CAN总线故障");
+                            }else if (data[17]==FarmConstant.ABNORMAL){
+                                Log.e(TAG,"CAN总线状态故障");
                                 responseData[7] = "异常";
+                            }else if (data[17]==FarmConstant.UNKNOWN) {
+                                Log.e(TAG,"CAN总线未知");
+                                responseData[7] = "未知";
                             }
 
+                            System.out.println(Arrays.toString(responseData));
+                            System.out.println(Arrays.toString(value));
                             //将字节数组传到intent中
                             intent.putExtra("responseData",responseData);
+                            intent.putExtra("VALUE",value);
                             intent.putExtra("BLUETOOTH_RESULT",blueToothResult);
                             broadcastManager.sendBroadcast(intent);
                             break;
@@ -260,11 +300,11 @@ public class BlueToothHelper  {
                             intent.putExtra("BLUETOOTH_RESULT",blueToothResult);
                             broadcastManager.sendBroadcast(intent);
                             break;
-                        case 0x0E:              //返回主界面BACK_MAIN
-                            intent = new Intent(FarmConstant.BACK_MAIN);
-                            intent.putExtra("BLUETOOTH_RESULT",blueToothResult);
-                            broadcastManager.sendBroadcast(intent);
-                            break;
+//                        case 0x0E:              //返回主界面BACK_MAIN
+//                            intent = new Intent(FarmConstant.BACK_MAIN);
+//                            intent.putExtra("BLUETOOTH_RESULT",blueToothResult);
+//                            broadcastManager.sendBroadcast(intent);
+//                            break;
                     }
                 }
             }
@@ -374,8 +414,6 @@ public class BlueToothHelper  {
             }
 
         }
-
-
 
 
         @Override
